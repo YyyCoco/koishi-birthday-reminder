@@ -1,5 +1,6 @@
 import { Context } from "koishi";
 import * as fs from "fs";
+import { logger } from "..";
 
 export function getBirthdayReminder(ctx: Context, commonConfig: any) {
     const { account, plantform, sendAccount, configPath } = commonConfig;
@@ -22,7 +23,10 @@ export function getBirthdayReminder(ctx: Context, commonConfig: any) {
     }
 
     if (todayBirthdayNames.length > 0) {
-        const msg = `今天[${todayStr}]生日的人：${todayBirthdayNames.join("，")}`;
-        ctx.bots[`${plantform}:${account}`].sendMessage(sendAccount, msg);
+        const msg = `今天[${todayStr}]生日的人: ${todayBirthdayNames.join("，")}`;
+        logger.info(`[birthday-reminder] Info: ${msg}`);
+        ctx.bots[`${plantform}:${account}`].sendPrivateMessage(sendAccount, msg);
+    } else {
+        logger.info(`[birthday-reminder] Info: 今天没有过生日的人`);
     }
 }

@@ -15,10 +15,17 @@ export function apply(ctx: Context, config: ConfigType) {
     account: config.account,
     plantform: config.plantform,
     sendAccount: config.sendAccount,
+    remindTime: config.remindTime,
     configPath: config.configPath,
   }
 
-  scheduleDaily(ctx, 12, 5, async () => {
+  const remindTime = getRemindTime(commonConfig.remindTime)
+  scheduleDaily(ctx, remindTime.hours, remindTime.minutes, async () => {
     getBirthdayReminder(ctx, commonConfig)
   })
+}
+
+function getRemindTime(remindTime: string) {
+  const [hours, minutes] = remindTime.split(':').map(Number)
+  return { hours, minutes }
 }
